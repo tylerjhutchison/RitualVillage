@@ -10,13 +10,16 @@ public class VillagerController : MonoBehaviour
 
     public Vector2 gridSpaceSize;
     string[] qwerty = new string[] { "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m" };
-	
+    public float frontRowShift;
+    public float middleRowShift;
+
+
 	void Start ()
     {
         //create all the villagersy
         //create a char of chars
 
-        int column = 0;
+        
         for (int i=0; i< qwerty.Length; i++)
         {
             print(i);
@@ -27,13 +30,13 @@ public class VillagerController : MonoBehaviour
             if (i > 18)
             {
                 // front row
-                posX = (i % 19) * gridSpaceSize.x;
+                posX = (i % 19) * gridSpaceSize.x + frontRowShift;
                 posZ = 0;
             } 
             else if (i > 9)
             {
                 // second row
-                posX = (i % 10) * gridSpaceSize.x;
+                posX = (i % 10) * gridSpaceSize.x + middleRowShift;
                 posZ = 1 * gridSpaceSize.y;
             }
             else
