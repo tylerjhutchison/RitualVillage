@@ -22,7 +22,7 @@ public class VillagerController : MonoBehaviour
         
         for (int i=0; i< qwerty.Length; i++)
         {
-            print(i);
+            //print(i);
 
             float posX = 0;
             float posZ = 0;
