@@ -3,21 +3,42 @@ using System.Collections;
 
 public class Villager : MonoBehaviour
 {
+    public enum State { Idle, Dancing}
+    State currentState;
 
-	void Start ()
+    public string letter;
+    Material skinMaterial;
+    Color origColor;
+    TextMesh textMesh;
+
+    public void Init(string s)
     {
+        skinMaterial = GetComponentInChildren<MeshRenderer>().material;
+        origColor = skinMaterial.color;
 
-    }
+        textMesh = GetComponentInChildren<TextMesh>();
 
-    public void Init(char c)
-    {
-        
+        letter = s;
+        textMesh.text = s;
     }
 
     void Update ()
     {
-	
+	    if (Input.GetKey(letter))
+        {
+            Debug.Log(letter);
+            StartCoroutine(Dance());
+        }
 	}
+
+    IEnumerator Dance ()
+    {
+        currentState = State.Dancing;
+        skinMaterial.color = Color.red;
+        yield return new WaitForSeconds(1);
+        skinMaterial.color = origColor;
+        currentState = State.Idle;
+    }
 
 
 }
