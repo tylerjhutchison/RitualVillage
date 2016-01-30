@@ -6,12 +6,18 @@ public class Villager : MonoBehaviour
 
 	void Start ()
     {
-	
-	}
-	
-	void Update ()
+
+    }
+
+    public void Init(char c)
+    {
+        
+    }
+
+    void Update ()
     {
 	
 	}
+
 
 }
