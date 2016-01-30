@@ -24,20 +24,34 @@ public class Villager : MonoBehaviour
 
     void Update ()
     {
-	    if (Input.GetKey(letter))
+	    if (Input.GetKeyDown(letter))
         {
-            StartCoroutine(Dance());
+            Debug.Log(letter);
+			if (currentState == State.Idle) {
+				Dance ();
+			} 
+			else {
+				StopDancing ();
+			}
         }
 	}
 
-    IEnumerator Dance ()
+	void Dance (){
+		currentState = State.Dancing;
+		skinMaterial.color = Color.red;
+		StartCoroutine(StopDanceHelper(Random.Range (3.0f,10.0f)));
+	}
+		
+	IEnumerator StopDanceHelper (float sleepTime)
     {
-        currentState = State.Dancing;
-        skinMaterial.color = Color.red;
-        yield return new WaitForSeconds(1);
-        skinMaterial.color = origColor;
-        currentState = State.Idle;
+        yield return new WaitForSeconds(sleepTime);
+		StopDancing ();
     }
+
+	void StopDancing(){
+		currentState = State.Idle;
+		skinMaterial.color = origColor;
+	}
 
 
 }
