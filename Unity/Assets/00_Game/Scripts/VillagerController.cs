@@ -5,6 +5,7 @@ using System.Collections;
 public class VillagerController : MonoBehaviour
 {
     public Villager villagerPrefab;
+    public GameObject groundTilePrefab; // HACK
 
     public Villager[] villagers;
 
@@ -13,13 +14,15 @@ public class VillagerController : MonoBehaviour
     public float frontRowShift;
     public float middleRowShift;
 
-
 	void Start ()
     {
         //create all the villagersy
         //create a char of chars
 
-        
+        // HACK for ground tile / keyboard
+        GameObject keyboard = new GameObject("Keyboard");
+        keyboard.transform.position = this.transform.position;
+
         for (int i=0; i< qwerty.Length; i++)
         {
             //print(i);
@@ -45,10 +48,17 @@ public class VillagerController : MonoBehaviour
                 posX = (i %10) * gridSpaceSize.x;
                 posZ = 2 * gridSpaceSize.y;
             }
+            // villager spawn
             Vector3 pos = new Vector3(posX, 0, posZ);
             Villager myVillager = Instantiate(villagerPrefab, Vector3.zero, Quaternion.identity) as Villager;
             myVillager.transform.parent = this.gameObject.transform;
             myVillager.transform.localPosition = pos;
+
+            // HACK ground tile spawn
+            GameObject groundTile = Instantiate(groundTilePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            groundTile.transform.parent = this.gameObject.transform;
+            groundTile.transform.localPosition = pos;
+            groundTile.transform.parent = keyboard.transform;
 
             myVillager.Init(qwerty[i]);
         }
