@@ -57,6 +57,7 @@ public class VillagerController : MonoBehaviour
 	void SpawnVillager( string letter) {
 		// villager spawn
 		Vector3 pos = TranslateAlphabetToCoord(letter);
+        Debug.Log(TranslateAlphabetToGridCoord(letter));
 		Villager myVillager = Instantiate(villagerPrefab, Vector3.zero, Quaternion.identity) as Villager;
 		myVillager.transform.parent = this.gameObject.transform;
 		myVillager.transform.localPosition = pos;
@@ -100,6 +101,28 @@ public class VillagerController : MonoBehaviour
 		}
 		return pos;
 	}
+
+    Vector2 TranslateAlphabetToGridCoord (string letter)
+    {
+        int i = ArrayUtility.IndexOf(qwerty, letter);
+        Vector2 gridCoord;
+
+        if (i > 18)
+        {
+            // front row
+            gridCoord = new Vector2((i % 19), 0);
+        }
+        else if (i > 9)
+        {
+            // second row
+            gridCoord = new Vector2((i % 10), 1);
+        }
+        else
+        {
+            gridCoord = new Vector2((i % 10), 2);
+        }
+        return gridCoord;
+    }
 
 	List<Villager> FindMyRow (string letter) {
 		int i = ArrayUtility.IndexOf (qwerty, letter);

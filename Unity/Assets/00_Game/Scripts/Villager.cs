@@ -5,6 +5,7 @@ public class Villager : MonoBehaviour
 {
     public enum State { Idle, Dancing, Watching}
     public State currentState;
+    private ToggleSuspend toggleMusic;
 
     public string letter;
     Material skinMaterial;
@@ -24,6 +25,7 @@ public class Villager : MonoBehaviour
 
         skinMaterial = GetComponentInChildren<MeshRenderer>().material;
         origColor = skinMaterial.color;
+        toggleMusic = GetComponent<ToggleSuspend>();
 
 		keyboardPosition = transform.position;
 
@@ -53,9 +55,7 @@ public class Villager : MonoBehaviour
 	}
 
 	void Dance (){
-		currentState = State.Dancing;
-		skinMaterial.color = Color.red;
-        animation.Dance();
+        StartDancing();
 		StartCoroutine(StopDanceHelper(Random.Range (3.0f,10.0f)));
 	}
 		
@@ -65,8 +65,17 @@ public class Villager : MonoBehaviour
 		StopDancing ();
     }
 
+    void StartDancing()
+    {
+        toggleMusic.Toggle();
+        currentState = State.Dancing;
+        skinMaterial.color = Color.red;
+        animation.Dance();
+    }
+
 	void StopDancing(){
-		currentState = State.Idle;
+        toggleMusic.Toggle();
+        currentState = State.Idle;
 		skinMaterial.color = origColor;
 		timeSinceLastDanced = Time.time;
         animation.Idle();

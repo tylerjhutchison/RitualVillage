@@ -6,7 +6,7 @@ public class ToggleSuspend : MonoBehaviour
 {
     [SerializeField] private PatternFollowerGroup _patternFollowerGroup;
 
-    private void OnMouseUpAsButton()
+    public void Toggle()
     {
         _patternFollowerGroup.Suspended = !_patternFollowerGroup.Suspended;
     }
