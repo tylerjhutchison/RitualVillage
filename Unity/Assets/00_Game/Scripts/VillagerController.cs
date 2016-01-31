@@ -7,9 +7,14 @@ public class VillagerController : MonoBehaviour
 {
     public Villager villagerPrefab;
     public GameObject groundTilePrefab; // HACK
+	GameObject keyboard;
 
     //public Villager[] villagers;
 	List<Villager> villagers;
+	//Create a Row for all the villagers
+	List<Villager> frontRow;
+	List<Villager> middleRow;
+	List<Villager> backRow;
 
 
     public Vector2 gridSpaceSize;
@@ -24,58 +29,61 @@ public class VillagerController : MonoBehaviour
         //create a char of chars
 		villagers = new List<Villager> ();
 
+		frontRow = new List<Villager> ();
+		middleRow = new List<Villager> ();
+		backRow = new List<Villager> ();
+
         // HACK for ground tile / keyboard
-        GameObject keyboard = new GameObject("Keyboard");
+        keyboard = new GameObject("Keyboard");
         keyboard.transform.position = this.transform.position;
 
         for (int i=0; i< qwerty.Length; i++)
         {
             //print(i);
-
-            float posX = 0;
-            float posZ = 0;
-
             if (i > 18)
             {
                 // front row
-                posX = (i % 19) * gridSpaceSize.x + frontRowShift;
-                posZ = 0;
+				Vector3 pos = new Vector3((i % 19) * gridSpaceSize.x + frontRowShift, 0, 0);
+				SpawnVillager (pos, i, frontRow);
             } 
             else if (i > 9)
             {
                 // second row
-                posX = (i % 10) * gridSpaceSize.x + middleRowShift;
-                posZ = 1 * gridSpaceSize.y;
+				Vector3 pos = new Vector3((i % 10) * gridSpaceSize.x + middleRowShift, 0,  1 * gridSpaceSize.y);
+				SpawnVillager (pos, i, middleRow);
             }
             else
             {
                 // back row
-                posX = (i %10) * gridSpaceSize.x;
-                posZ = 2 * gridSpaceSize.y;
+				Vector3 pos = new Vector3((i %10) * gridSpaceSize.x, 0,  2 * gridSpaceSize.y);
+				SpawnVillager (pos, i, backRow);
             }
-            // villager spawn
-            Vector3 pos = new Vector3(posX, 0, posZ);
-            Villager myVillager = Instantiate(villagerPrefab, Vector3.zero, Quaternion.identity) as Villager;
-            myVillager.transform.parent = this.gameObject.transform;
-            myVillager.transform.localPosition = pos;
-			villagers.Add (myVillager);
-
-
-            // HACK ground tile spawn
-            GameObject groundTile = Instantiate(groundTilePrefab, Vector3.zero, Quaternion.identity) as GameObject;
-            groundTile.transform.parent = this.gameObject.transform;
-            groundTile.transform.localPosition = pos;
-            groundTile.transform.parent = keyboard.transform;
-
-            myVillager.Init(qwerty[i]);
+            
         }
         //for each letter of the alphabet, create a villager
-
 		StartCoroutine (UpdateFaith ());
 
 
     }
-	
+
+	void SpawnVillager( Vector3 pos, string letter, List<Villager> row) {
+		// villager spawn
+		Villager myVillager = Instantiate(villagerPrefab, Vector3.zero, Quaternion.identity) as Villager;
+		myVillager.transform.parent = this.gameObject.transform;
+		myVillager.transform.localPosition = pos;
+		villagers.Add (myVillager);
+		row.Add (myVillager);
+
+
+		// HACK ground tile spawn
+		GameObject groundTile = Instantiate(groundTilePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+		groundTile.transform.parent = this.gameObject.transform;
+		groundTile.transform.localPosition = pos;
+		groundTile.transform.parent = keyboard.transform;
+
+		myVillager.Init(qwerty[letter]);
+	}
+
 	void Update ()
     {
 		
