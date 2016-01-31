@@ -44,19 +44,19 @@ public class VillagerController : MonoBehaviour
             {
                 // front row
 				Vector3 pos = new Vector3((i % 19) * gridSpaceSize.x + frontRowShift, 0, 0);
-				SpawnVillager (pos, i, frontRow);
+				SpawnVillager (pos, qwerty[i], frontRow);
             } 
             else if (i > 9)
             {
                 // second row
 				Vector3 pos = new Vector3((i % 10) * gridSpaceSize.x + middleRowShift, 0,  1 * gridSpaceSize.y);
-				SpawnVillager (pos, i, middleRow);
+				SpawnVillager (pos, qwerty[i], middleRow);
             }
             else
             {
                 // back row
 				Vector3 pos = new Vector3((i %10) * gridSpaceSize.x, 0,  2 * gridSpaceSize.y);
-				SpawnVillager (pos, i, backRow);
+				SpawnVillager (pos, qwerty[i], backRow);
             }
             
         }
@@ -81,7 +81,7 @@ public class VillagerController : MonoBehaviour
 		groundTile.transform.localPosition = pos;
 		groundTile.transform.parent = keyboard.transform;
 
-		myVillager.Init(qwerty[letter]);
+		myVillager.Init(letter);
 	}
 
 	void Update ()
