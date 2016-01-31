@@ -54,6 +54,7 @@ namespace DerelictComputer
 
         private void OnEnable()
         {
+            _pulse = GameObject.Find("Pulse").GetComponent<Pulse>();
             switch (_followType)
             {
                 case FollowType.Pulse:
