@@ -19,6 +19,7 @@ public class VillagerPatternFollower : PatternFollower
             return;
         }
 
-        anim.Dance();
+        //anim.Dance();
+        anim.MusicReact();
     }
 }

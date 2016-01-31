@@ -32,6 +32,10 @@ namespace DerelictComputer
 
                 return MusicMathUtils.SemitonesToPitch(_pitchInSemitones);
             }
+            set
+            {
+                _pitchInSemitones = value;
+            }
         }
 
         public int Offset

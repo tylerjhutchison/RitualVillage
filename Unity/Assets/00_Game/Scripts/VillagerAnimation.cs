@@ -38,4 +38,17 @@ public class VillagerAnimation : MonoBehaviour
     {
 		anim.SetTrigger("idle");
     }
+
+    public void MusicReact ()
+    {
+        iTween.PunchScale(gameObject, 
+            iTween.Hash
+            (
+                "x", 2f,
+                "time", .6f
+
+            )
+        );
+    }
+
 }

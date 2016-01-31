@@ -11,6 +11,8 @@ public class Villager : MonoBehaviour
     // music stuff
     private ToggleSuspend musicToggle;
     private Pattern musicPattern;
+    private Sampler musicSample;
+    public bool usePitch;
 
     public string letter;
     Material skinMaterial;
@@ -34,6 +36,8 @@ public class Villager : MonoBehaviour
         musicToggle = GetComponent<ToggleSuspend>();
         musicPattern = GetComponent<Pattern>();
         SetMusicPattern();
+        musicSample = GetComponent<Sampler>();
+        SetMusicSample();
 
 		keyboardPosition = transform.position;
 
@@ -78,7 +82,7 @@ public class Villager : MonoBehaviour
         musicToggle.Toggle();
         currentState = State.Dancing;
         skinMaterial.color = Color.red;
-        //animation.Dance();
+        animation.Dance();
     }
 
 	void StopDancing(){
@@ -109,6 +113,12 @@ public class Villager : MonoBehaviour
     void SetMusicPattern ()
     {
         musicPattern.Steps[(int)gridCoord.x].Active = true;
+    }
+
+    void SetMusicSample ()
+    {
+        if (usePitch)
+            musicSample.Samples[0].Pitch = gridCoord.x;
     }
 
 }
