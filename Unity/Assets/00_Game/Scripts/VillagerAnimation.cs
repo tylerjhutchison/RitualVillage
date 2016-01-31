@@ -3,19 +3,25 @@ using System.Collections;
 
 public class VillagerAnimation : MonoBehaviour
 {
-    public Transform headJoint;
+    new Animator animator;
 
 	void Start ()
     {
-
+        animator = GetComponent<Animator>();
     }
 	
 	void Update ()
     {
-        //headJoint.right = -(headJoint.position - Camera.main.transform.position);
-        //headJoint.Rotate(Vector3.right, 90);
-        //headJoint.Rotate(Vector3.forward, 180);
 
-        headJoint.LookAt(Camera.main.transform);
+    }
+
+    public void Dance()
+    {
+        animator.SetTrigger("dance");
+    }
+
+    public void Idle()
+    {
+        animator.SetTrigger("idle");
     }
 }

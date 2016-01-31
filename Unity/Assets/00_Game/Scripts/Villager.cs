@@ -12,8 +12,12 @@ public class Villager : MonoBehaviour
     TextMesh textMesh;
 	public float timeSinceLastDanced;
 
+    new VillagerAnimation animation;
+
     public void Init(string s)
     {
+        animation = GetComponent<VillagerAnimation>();
+
         skinMaterial = GetComponentInChildren<MeshRenderer>().material;
         origColor = skinMaterial.color;
 
@@ -43,6 +47,7 @@ public class Villager : MonoBehaviour
 	void Dance (){
 		currentState = State.Dancing;
 		skinMaterial.color = Color.red;
+        animation.Dance();
 		StartCoroutine(StopDanceHelper(Random.Range (3.0f,10.0f)));
 	}
 		
@@ -56,6 +61,7 @@ public class Villager : MonoBehaviour
 		currentState = State.Idle;
 		skinMaterial.color = origColor;
 		timeSinceLastDanced = Time.time;
+        animation.Idle();
 	}
 
 	public float TimeSpentIdle() {
