@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Villager : MonoBehaviour
 {
-    public enum State { Idle, Dancing}
+    public enum State { Idle, Dancing, Watching}
     public State currentState;
 
     public string letter;
@@ -34,9 +34,6 @@ public class Villager : MonoBehaviour
 
 		currentState = State.Idle;
 		timeSinceLastDanced = Time.time;
-
-
-
     }
 
     void Update ()
@@ -48,6 +45,8 @@ public class Villager : MonoBehaviour
 				Dance ();
 			} 
 			else {
+				//OH FUCK! THIS SHOULD PISS HIM OFF.
+				//SEND OUT A SIGNAL SHAKE THE CAMERA ETC.
 				StopDancing ();
 			}
         }
@@ -79,6 +78,15 @@ public class Villager : MonoBehaviour
 		} else {
 			return 0;
 		}
+	}
+
+	public void StartWatching (){
+		currentState = State.Watching;
+		//Let's go to a place on a curve between things. starting at 0 and going until blah.
+		float xPos = Random.Range(0f,10f);
+		float zPos = (-Mathf.Pow(xPos, 2)*.1f + xPos + 3);
+		transform.localPosition = new Vector3(xPos ,0, zPos);
+
 	}
 
 }

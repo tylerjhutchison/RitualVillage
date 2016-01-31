@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,6 +16,8 @@ public class VillagerController : MonoBehaviour
 	List<Villager> frontRow;
 	List<Villager> middleRow;
 	List<Villager> backRow;
+
+	public event System.Action OnGameOver;
 
 
     public Vector2 gridSpaceSize;
@@ -39,40 +42,26 @@ public class VillagerController : MonoBehaviour
 
         for (int i=0; i< qwerty.Length; i++)
         {
-            //print(i);
-            if (i > 18)
-            {
-                // front row
-				Vector3 pos = new Vector3((i % 19) * gridSpaceSize.x + frontRowShift, 0, 0);
-				SpawnVillager (pos, qwerty[i], frontRow);
-            } 
-            else if (i > 9)
-            {
-                // second row
-				Vector3 pos = new Vector3((i % 10) * gridSpaceSize.x + middleRowShift, 0,  1 * gridSpaceSize.y);
-				SpawnVillager (pos, qwerty[i], middleRow);
-            }
-            else
-            {
-                // back row
-				Vector3 pos = new Vector3((i %10) * gridSpaceSize.x, 0,  2 * gridSpaceSize.y);
-				SpawnVillager (pos, qwerty[i], backRow);
-            }
-            
+			SpawnVillager (qwerty[i]);
         }
+		//Send the the back and front row to the edge of the map.
+		MakeRowWatch(backRow);
+		MakeRowWatch(frontRow);
+
+
+
         //for each letter of the alphabet, create a villager
 		StartCoroutine (UpdateFaith ());
-
-
     }
 
-	void SpawnVillager( Vector3 pos, string letter, List<Villager> row) {
+	void SpawnVillager( string letter) {
 		// villager spawn
+		Vector3 pos = TranslateAlphabetToCoord(letter);
 		Villager myVillager = Instantiate(villagerPrefab, Vector3.zero, Quaternion.identity) as Villager;
 		myVillager.transform.parent = this.gameObject.transform;
 		myVillager.transform.localPosition = pos;
 		villagers.Add (myVillager);
-		row.Add (myVillager);
+		FindMyRow (letter).Add (myVillager);
 
 		// HACK ground tile spawn
 		GameObject groundTile = Instantiate(groundTilePrefab, Vector3.zero, Quaternion.identity) as GameObject;
@@ -87,6 +76,56 @@ public class VillagerController : MonoBehaviour
     {
 		
 	}
+
+
+	Vector3 TranslateAlphabetToCoord (string letter)
+	{
+		int i = ArrayUtility.IndexOf (qwerty, letter);
+		Vector3 pos;
+
+		if (i > 18)
+		{
+			// front row
+			pos = new Vector3((i % 19) * gridSpaceSize.x + frontRowShift, 0, 0);
+		} 
+		else if (i > 9)
+		{
+			// second row
+			pos = new Vector3((i % 10) * gridSpaceSize.x + middleRowShift, 0,  1 * gridSpaceSize.y);
+		}
+		else
+		{
+			// back row
+			pos = new Vector3((i %10) * gridSpaceSize.x, 0,  2 * gridSpaceSize.y);
+		}
+		return pos;
+	}
+
+	List<Villager> FindMyRow (string letter) {
+		int i = ArrayUtility.IndexOf (qwerty, letter);
+		List<Villager> myRow;
+
+		if (i > 18)
+		{
+			myRow = frontRow;
+		} 
+		else if (i > 9)
+		{
+			myRow = middleRow;
+		}
+		else
+		{
+			myRow = backRow;
+		}
+		return myRow;
+	}
+
+	void MakeRowWatch (List<Villager> currentRow) {
+		foreach (Villager currentVillager in currentRow) {
+			currentVillager.StartWatching ();
+		}
+	}
+
 
 	/**
 	 * Continually poll villagers faith.
@@ -108,5 +147,11 @@ public class VillagerController : MonoBehaviour
 		}
 
 		print ("YOU LOSE!");
+		GameOver ();
+	}
+
+	[ContextMenu ("Lose Game")]
+	void GameOver(){
+		OnGameOver ();
 	}
 }
