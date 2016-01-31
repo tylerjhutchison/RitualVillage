@@ -4,14 +4,12 @@ using DerelictComputer;
 
 public class VillagerPatternFollower : PatternFollower
 {
-    [SerializeField]
-    private string _triggerName;
 
-    private Animator _animator;
+    private VillagerAnimation anim;
 
     private void Start()
     {
-        _animator = GetComponent<Animator>();
+         anim = GetComponent<VillagerAnimation>();
     }
 
     protected override void OnStepTriggered(int stepIndex, double pulseTime)
@@ -21,6 +19,6 @@ public class VillagerPatternFollower : PatternFollower
             return;
         }
 
-        _animator.SetTrigger(_triggerName);
+        anim.Dance();
     }
 }

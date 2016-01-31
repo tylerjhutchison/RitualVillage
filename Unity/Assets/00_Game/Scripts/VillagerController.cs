@@ -57,9 +57,9 @@ public class VillagerController : MonoBehaviour
 	void SpawnVillager( string letter) {
 		// villager spawn
 		Vector3 pos = TranslateAlphabetToCoord(letter);
-        Debug.Log(TranslateAlphabetToGridCoord(letter));
 		Villager myVillager = Instantiate(villagerPrefab, Vector3.zero, Quaternion.identity) as Villager;
-		myVillager.transform.parent = this.gameObject.transform;
+        myVillager.gridCoord = TranslateAlphabetToGridCoord(letter);
+        myVillager.transform.parent = this.gameObject.transform;
 		myVillager.transform.localPosition = pos;
 		villagers.Add (myVillager);
 		FindMyRow (letter).Add (myVillager);

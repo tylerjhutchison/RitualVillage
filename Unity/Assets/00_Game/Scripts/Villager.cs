@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DerelictComputer;
 
 public class Villager : MonoBehaviour
 {
     public enum State { Idle, Dancing, Watching}
     public State currentState;
-    private ToggleSuspend toggleMusic;
+    public Vector2 gridCoord; // the keyboard keys grid coordinates I am standing on
+
+    // music stuff
+    private ToggleSuspend musicToggle;
+    private Pattern musicPattern;
 
     public string letter;
     Material skinMaterial;
@@ -14,7 +19,6 @@ public class Villager : MonoBehaviour
 	public float timeSinceLastDanced;
 
 	Vector3 keyboardPosition;
-
 
     new VillagerAnimation animation;
 
@@ -25,7 +29,11 @@ public class Villager : MonoBehaviour
 
         skinMaterial = GetComponentInChildren<MeshRenderer>().material;
         origColor = skinMaterial.color;
-        toggleMusic = GetComponent<ToggleSuspend>();
+
+        // music stuff
+        musicToggle = GetComponent<ToggleSuspend>();
+        musicPattern = GetComponent<Pattern>();
+        SetMusicPattern();
 
 		keyboardPosition = transform.position;
 
@@ -67,19 +75,19 @@ public class Villager : MonoBehaviour
 
     void StartDancing()
     {
-        toggleMusic.Toggle();
+        musicToggle.Toggle();
         currentState = State.Dancing;
         skinMaterial.color = Color.red;
-        animation.Dance();
+        //animation.Dance();
     }
 
 	void StopDancing(){
-        toggleMusic.Toggle();
+        musicToggle.Toggle();
         currentState = State.Idle;
 		skinMaterial.color = origColor;
 		timeSinceLastDanced = Time.time;
         animation.Idle();
-	}
+    }
 
 	public float TimeSpentIdle() {
 		if (currentState == State.Idle) {
@@ -97,5 +105,10 @@ public class Villager : MonoBehaviour
 		transform.localPosition = new Vector3(xPos ,0, zPos);
 
 	}
+
+    void SetMusicPattern ()
+    {
+        musicPattern.Steps[(int)gridCoord.x].Active = true;
+    }
 
 }
