@@ -1,25 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent( typeof(Villager) )]
 public class VillagerController : MonoBehaviour
 {
     public Villager villagerPrefab;
 
-    public Villager[] villagers;
+    //public Villager[] villagers;
+	List<Villager> villagers;
+
 
     public Vector2 gridSpaceSize;
     string[] qwerty = new string[] { "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m" };
     public float frontRowShift;
     public float middleRowShift;
+	public float timeToNextFaithCheck;
 
 
 	void Start ()
     {
         //create all the villagersy
         //create a char of chars
+		villagers = new List<Villager> ();
 
-        
+
         for (int i=0; i< qwerty.Length; i++)
         {
             //print(i);
@@ -49,15 +54,42 @@ public class VillagerController : MonoBehaviour
             Villager myVillager = Instantiate(villagerPrefab, Vector3.zero, Quaternion.identity) as Villager;
             myVillager.transform.parent = this.gameObject.transform;
             myVillager.transform.localPosition = pos;
+			villagers.Add (myVillager);
+
 
             myVillager.Init(qwerty[i]);
         }
         //for each letter of the alphabet, create a villager
 
+		StartCoroutine (UpdateFaith ());
+
+
     }
 	
 	void Update ()
     {
-	
+		
+	}
+
+	/**
+	 * Continually poll villagers faith.
+	 */
+	IEnumerator UpdateFaith() {
+		float refreshRate = .5f;
+		float totalLackOfFaith = 0;
+
+		while (totalLackOfFaith < 60f) {
+
+			totalLackOfFaith = 0;
+			foreach (Villager currentVillager in villagers)
+			{
+				totalLackOfFaith += currentVillager.TimeSpentIdle ();
+			}
+			print ("Total Faith: " + totalLackOfFaith);
+			
+			yield return new WaitForSeconds (refreshRate);
+		}
+
+		print ("YOU LOSE!");
 	}
 }

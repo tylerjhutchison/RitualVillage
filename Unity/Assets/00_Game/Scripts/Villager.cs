@@ -4,12 +4,13 @@ using System.Collections;
 public class Villager : MonoBehaviour
 {
     public enum State { Idle, Dancing}
-    State currentState;
+    public State currentState;
 
     public string letter;
     Material skinMaterial;
     Color origColor;
     TextMesh textMesh;
+	public float timeSinceLastDanced;
 
     public void Init(string s)
     {
@@ -20,13 +21,16 @@ public class Villager : MonoBehaviour
 
         letter = s;
         textMesh.text = s;
+
+		currentState = State.Idle;
+		timeSinceLastDanced = Time.time;
     }
 
     void Update ()
     {
 	    if (Input.GetKeyDown(letter))
         {
-            Debug.Log(letter);
+            //Debug.Log(letter);
 			if (currentState == State.Idle) {
 				Dance ();
 			} 
@@ -51,7 +55,15 @@ public class Villager : MonoBehaviour
 	void StopDancing(){
 		currentState = State.Idle;
 		skinMaterial.color = origColor;
+		timeSinceLastDanced = Time.time;
 	}
 
+	public float TimeSpentIdle() {
+		if (currentState == State.Idle) {
+			return  Time.time - timeSinceLastDanced;
+		} else {
+			return 0;
+		}
+	}
 
 }
