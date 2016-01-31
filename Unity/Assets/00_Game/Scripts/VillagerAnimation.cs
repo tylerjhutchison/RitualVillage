@@ -3,12 +3,12 @@ using System.Collections;
 
 public class VillagerAnimation : MonoBehaviour
 {
-    new Animator animator;
-	//Depending on the letter we select 
+	public Animator anim;
+
 
 	void Start ()
     {
-        animator = GetComponent<Animator>();
+		
 		//animator.SetLayerWeight ();
     }
 	
@@ -17,14 +17,25 @@ public class VillagerAnimation : MonoBehaviour
 
     }
 
+	public void Init(string letter) {
+		anim = GetComponent<Animator>();
+		//this is getting called before start for
+		char asciiLetter = letter.ToCharArray ()[0];
+		int stateLayerIndex = System.Convert.ToInt32 (asciiLetter) - 97;
+		anim.SetLayerWeight(0,1f);
+		anim.SetLayerWeight(stateLayerIndex +1,1f);
+
+
+	}
+
     public void Dance()
     {
 		
-		animator.SetTrigger("dance");
+		anim.SetTrigger("dance");
     }
 
     public void Idle()
     {
-        animator.SetTrigger("idle");
+		anim.SetTrigger("idle");
     }
 }

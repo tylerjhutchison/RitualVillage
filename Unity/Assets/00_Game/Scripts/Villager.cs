@@ -12,14 +12,20 @@ public class Villager : MonoBehaviour
     TextMesh textMesh;
 	public float timeSinceLastDanced;
 
+	Vector3 keyboardPosition;
+
+
     new VillagerAnimation animation;
 
     public void Init(string s)
     {
         animation = GetComponent<VillagerAnimation>();
+		animation.Init ("b");
 
         skinMaterial = GetComponentInChildren<MeshRenderer>().material;
         origColor = skinMaterial.color;
+
+		keyboardPosition = transform.position;
 
         textMesh = GetComponentInChildren<TextMesh>();
 
@@ -28,6 +34,9 @@ public class Villager : MonoBehaviour
 
 		currentState = State.Idle;
 		timeSinceLastDanced = Time.time;
+
+
+
     }
 
     void Update ()
