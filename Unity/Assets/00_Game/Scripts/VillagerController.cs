@@ -76,7 +76,7 @@ public class VillagerController : MonoBehaviour
 		//FindMyRow (letter).Add (myVillager);
 
 		// HACK ground tile spawn
-		GameObject groundTile = Instantiate(groundTilePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+		GameObject groundTile = Instantiate(groundTilePrefab, new Vector3(0,-.2f,0), Quaternion.identity) as GameObject;
 		groundTile.transform.parent = this.gameObject.transform;
 		groundTile.transform.localPosition = pos;
 		groundTile.transform.parent = keyboard.transform;
