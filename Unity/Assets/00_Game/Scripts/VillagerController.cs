@@ -13,9 +13,9 @@ public class VillagerController : MonoBehaviour
     //public Villager[] villagers;
 	List<Villager> villagers;
 	//Create a Row for all the villagers
-	List<Villager> frontRow;
-	List<Villager> middleRow;
-	List<Villager> backRow;
+	Queue<Villager> frontRow;
+	Queue<Villager> middleRow;
+	Queue<Villager> backRow;
 
 	public event System.Action OnStartGame;
 	public event System.Action OnGameOver;
@@ -35,9 +35,9 @@ public class VillagerController : MonoBehaviour
         //create a char of chars
 		villagers = new List<Villager> ();
 
-		frontRow = new List<Villager> ();
-		middleRow = new List<Villager> ();
-		backRow = new List<Villager> ();
+		frontRow = new Queue<Villager> ();
+		middleRow = new Queue<Villager> ();
+		backRow = new Queue<Villager> ();
 
         // HACK for ground tile / keyboard
         keyboard = new GameObject("Keyboard");
@@ -72,7 +72,8 @@ public class VillagerController : MonoBehaviour
         myVillager.transform.parent = this.gameObject.transform;
 		myVillager.transform.localPosition = pos;
 		villagers.Add (myVillager);
-		FindMyRow (letter).Add (myVillager);
+		FindMyRow (letter).Enqueue (myVillager);
+		//FindMyRow (letter).Add (myVillager);
 
 		// HACK ground tile spawn
 		GameObject groundTile = Instantiate(groundTilePrefab, Vector3.zero, Quaternion.identity) as GameObject;
@@ -134,9 +135,9 @@ public class VillagerController : MonoBehaviour
         return gridCoord;
     }
 
-	List<Villager> FindMyRow (string letter) {
+	Queue<Villager> FindMyRow (string letter) {
 		int i = ArrayUtility.IndexOf (qwerty, letter);
-		List<Villager> myRow;
+		Queue<Villager> myRow;
 
 		if (i > 18)
 		{
@@ -153,7 +154,7 @@ public class VillagerController : MonoBehaviour
 		return myRow;
 	}
 
-	void MakeRowWatch (List<Villager> currentRow) {
+	void MakeRowWatch (Queue<Villager> currentRow) {
 		foreach (Villager currentVillager in currentRow) {
 			currentVillager.StartWatching ();
 		}
@@ -194,8 +195,28 @@ public class VillagerController : MonoBehaviour
 	 * Continually poll villagers faith.
 	 */
 	IEnumerator IncreaseDifficulty() {
-		yield return new WaitForSeconds (30);
-		MakeRowJoin (backRow);
+
+
+		while (backRow.Count > 0 && frontRow.Count > 0) {
+			yield return new WaitForSeconds (10);
+
+			Queue<Villager> useRow;
+			if (frontRow.Count > 0) {
+				useRow = frontRow;
+			} 
+			else {
+				useRow = backRow;
+			}
+				
+			Villager newVillager = useRow.Dequeue ();
+			newVillager.JoinDance ();
+
+			//MakeRowJoin (backRow);
+
+		}
+
+
+
 
 	}
 
