@@ -27,7 +27,7 @@ public class Villager : MonoBehaviour
     public void Init(string s)
     {
         animation = GetComponent<VillagerAnimation>();
-		animation.Init ("b");
+		animation.Init (s);
 
         skinMaterial = GetComponentInChildren<MeshRenderer>().material;
         origColor = skinMaterial.color;
