@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -89,10 +89,22 @@ public class VillagerController : MonoBehaviour
 		
 	}
 
+    int IndexOf(string[] strings, string s)
+    {
+        int myIndex = -1;
+        for (int i = 0; i < strings.Length; i++)
+        {
+            if (s == strings[i])
+            {
+                myIndex = i;
+            }
+        }
+        return myIndex;
+    }
 
 	Vector3 TranslateAlphabetToCoord (string letter)
 	{
-		int i = ArrayUtility.IndexOf (qwerty, letter);
+		int i = IndexOf (qwerty, letter);
 		Vector3 pos;
 
 		if (i > 18)
@@ -115,7 +127,7 @@ public class VillagerController : MonoBehaviour
 
     Vector2 TranslateAlphabetToGridCoord (string letter)
     {
-        int i = ArrayUtility.IndexOf(qwerty, letter);
+        int i = IndexOf(qwerty, letter);
         Vector2 gridCoord;
 
         if (i > 18)
@@ -136,7 +148,7 @@ public class VillagerController : MonoBehaviour
     }
 
 	Queue<Villager> FindMyRow (string letter) {
-		int i = ArrayUtility.IndexOf (qwerty, letter);
+		int i = IndexOf (qwerty, letter);
 		Queue<Villager> myRow;
 
 		if (i > 18)

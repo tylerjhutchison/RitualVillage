@@ -4,11 +4,11 @@ using System.Collections;
 public class VillagerAnimation : MonoBehaviour
 {
 	public Animator anim;
-
+    public Villager villager;
 
 	void Start ()
     {
-		
+        villager = GetComponent<Villager>();
 		//animator.SetLayerWeight ();
     }
 	
@@ -41,14 +41,17 @@ public class VillagerAnimation : MonoBehaviour
 
     public void MusicReact ()
     {
-        iTween.PunchScale(gameObject, 
-            iTween.Hash
-            (
-                "x", 2f,
-                "time", .6f
+        if (villager.currentState == Villager.State.Dancing)
+        {
+            iTween.PunchScale(gameObject,
+                iTween.Hash
+                (
+                    "x", 2f,
+                    "time", .6f
 
-            )
-        );
+                )
+            );
+        }
     }
 
 }
