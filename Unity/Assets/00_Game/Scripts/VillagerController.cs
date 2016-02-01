@@ -17,7 +17,9 @@ public class VillagerController : MonoBehaviour
 	List<Villager> middleRow;
 	List<Villager> backRow;
 
+	public event System.Action OnStartGame;
 	public event System.Action OnGameOver;
+
 
 
     public Vector2 gridSpaceSize;
@@ -25,6 +27,7 @@ public class VillagerController : MonoBehaviour
     public float frontRowShift;
     public float middleRowShift;
 	public float timeToNextFaithCheck;
+	public float totalLackOfFaith { get; protected set;}
 
 	void Start ()
     {
@@ -48,11 +51,18 @@ public class VillagerController : MonoBehaviour
 		MakeRowWatch(backRow);
 		MakeRowWatch(frontRow);
 
-
-
         //for each letter of the alphabet, create a villager
-		StartCoroutine (UpdateFaith ());
+		StartGame();
     }
+
+
+	void StartGame(){
+
+		OnStartGame ();
+		StartCoroutine (UpdateFaith ());
+		StartCoroutine (IncreaseDifficulty ());
+	}
+
 
 	void SpawnVillager( string letter) {
 		// villager spawn
@@ -149,13 +159,19 @@ public class VillagerController : MonoBehaviour
 		}
 	}
 
+	void MakeRowJoin (List<Villager> currentRow) {
+		foreach (Villager currentVillager in currentRow) {
+			currentVillager.JoinDance ();
+		}
+	}
+
 
 	/**
 	 * Continually poll villagers faith.
 	 */
 	IEnumerator UpdateFaith() {
 		float refreshRate = .5f;
-		float totalLackOfFaith = 0;
+		totalLackOfFaith = 0;
 
 		while (totalLackOfFaith < 60f) {
 
@@ -171,6 +187,16 @@ public class VillagerController : MonoBehaviour
 
 		print ("YOU LOSE!");
 		GameOver ();
+	}
+
+
+	/**
+	 * Continually poll villagers faith.
+	 */
+	IEnumerator IncreaseDifficulty() {
+		yield return new WaitForSeconds (30);
+		MakeRowJoin (backRow);
+
 	}
 
 	[ContextMenu ("Lose Game")]

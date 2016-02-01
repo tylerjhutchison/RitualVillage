@@ -39,7 +39,7 @@ public class Villager : MonoBehaviour
         musicSample = GetComponent<Sampler>();
         SetMusicSample();
 
-		keyboardPosition = transform.position;
+		keyboardPosition = transform.localPosition;
 
         textMesh = GetComponentInChildren<TextMesh>();
 
@@ -58,10 +58,15 @@ public class Villager : MonoBehaviour
 			if (currentState == State.Idle) {
 				Dance ();
 			} 
-			else {
+			else if (currentState == State.Dancing) {
 				//OH FUCK! THIS SHOULD PISS HIM OFF.
 				//SEND OUT A SIGNAL SHAKE THE CAMERA ETC.
+				//Maybe you get a penalty of -2 seconds to start with.
 				StopDancing ();
+			}
+			else {
+				//Else do nothing. They are watching.
+
 			}
         }
 	}
@@ -107,6 +112,13 @@ public class Villager : MonoBehaviour
 		float xPos = Random.Range(0f,10f);
 		float zPos = (-Mathf.Pow(xPos, 2)*.1f + xPos + 3);
 		transform.localPosition = new Vector3(xPos ,0, zPos);
+
+	}
+
+	public void JoinDance (){
+		currentState = State.Idle;
+		timeSinceLastDanced = Time.time;
+		transform.localPosition = keyboardPosition;
 
 	}
 
